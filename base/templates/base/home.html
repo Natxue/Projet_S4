@@ -1,24 +1,28 @@
 {%  extends 'main.html' %}
 
 {% block content %}
-<h1> ACCUEIL </h1>
 
-<div>
 
-    <a href="{% url 'nouvelle-annonce' %}"> Créer une nouvelle annonce </a>
-
-    <div>
+<section class="">
+    <div class="div_annonces_start">
+        <h1> MES ANNONCES </h1>
+        <a class="btn-default" href="{% url 'nouvelle-annonce' %}"> Créer une nouvelle annonce </a>
+    </div>
+    <div class="card-container">
         {% for annonce in annonces %}
-            <div>
-                <h5> {{ annonce.id }} -- <a href="{% url 'annonce' annonce.id %}"> {{ annonce.titre }} </a> </h5>
-                <span>{{ annonce.prix }} € </span>
-                <a href="{% url 'modifier-annonce' annonce.id %}"> Modifier </a>
-                <a href="{% url 'supprimer-annonce' annonce.id %}"> Supprimer </a>
-                <hr>
-            </div>
+            <article class="card">
+                <h4 class="annonce-titre"> {{ annonce.id }} -- <a href="{% url 'annonce' annonce.id %}"> {{ annonce.titre }} </a> </h4>
+                <p>{{ annonce.prix }} € </p>
+
+                <a class="btn-card" href="{% url 'modifier-annonce' annonce.id %}"> Modifier </a>
+                <a class="btn-card" href="{% url 'supprimer-annonce' annonce.id %}"> Supprimer </a>
+            </article>
         {% endfor %}
     </div>
 
-</div>
+</section>
+
+
+
 
 {% endblock content %}

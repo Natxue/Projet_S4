@@ -6,11 +6,12 @@ from django.contrib.auth.models import User
 class Annonce(models.Model):
     # relation (1n) User_Annonce
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
-    # type =
+    type = models.IntegerField(default=0)
     titre = models.CharField(max_length=200)
     details = models.TextField()
     prix = models.IntegerField(default=0)
     mise_en_ligne = models.DateTimeField(auto_now_add=True)
+    associations = models.ManyToManyField('self', default=None, blank=True)
 
     def __str__(self):
         return self.titre

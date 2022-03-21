@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Annonce
 from .forms import AnnonceFormulaire
 
@@ -13,7 +14,13 @@ def home(request):
 
 def annonce(request, pk):
     display = Annonce.objects.get(id=pk)
-    context = {'annonce': display}
+    if display.type == 0:
+        ads_inverse = 1
+    else:
+        ads_inverse = 0
+    list_ads = Annonce.objects.filter(type=ads_inverse)
+    list_saved = display.associations.all()
+    context = {'annonce': display, 'assoc': list_ads, 'saved': list_saved}
     return render(request, 'base/annonce.html', context)
 
 
@@ -43,7 +50,6 @@ def modifier_annonce(request, pk):
         if form.is_valid():
             form.save()
             return redirect('home')
-
     context = {'form': form}
     return render(request, 'base/annonce_form.html', context)
 
@@ -55,4 +61,14 @@ def supprimer_annonce(request, pk):
         return redirect('home')
 
     return render(request, 'base/delete.html', {'obj': annonce})
+
+
+def enregistrer_annonce(request, pk, id_assoc):
+    # obj = get_object_or_404(Annonce, id=pk)
+    obj = Annonce.objects.get(id=pk)
+    if obj.associations.filter(id=id_assoc).exists():
+        obj.associations.remove(Annonce.objects.get(id=id_assoc))
+    else:
+        obj.associations.add(Annonce.objects.get(id=id_assoc))
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 

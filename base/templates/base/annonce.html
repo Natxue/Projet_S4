@@ -1,10 +1,68 @@
 {%  extends 'main.html' %}
 
 {% block content %}
-<h1> {{ annonce.titre }}</h1>
 
-<div>
-    {{ annonce.details }}
+<div id="main-div-annonce">
+    <section>
+        <h1> {{ annonce.titre }}</h1>
+
+        <div>
+            {{ annonce.details }}
+        </div>
+    </section>
+
+    <section id="section-ad-associations">
+
+        <div id="tab-annonce-assoc">
+            <button class="list-onglet active" onclick="openTab(event, 'correspondances')"> Annonces correspondants </button>
+            <button class="list-onglet" onclick="openTab(event, 'enregistrements')"> Annonces enregistrées </button>
+        </div>
+
+        <div id="correspondances" class="list-container">
+            {% for ad in assoc %}
+                <article class="list-card">
+                    <h4 class="annonce-titre"> {{ ad.id }} -- <a href="{% url 'annonce' ad.id %}"> {{ ad.titre }} </a> </h4>
+                    <span>{{ ad.prix }} € </span>
+                    <div>
+                        <p> {{ ad.utilisateur}} </p>
+                        <a class="btn-card" href="/"> Contacter l'annonceur </a>
+                        <a class="btn-card" href="{% url 'enregistrer-annonce' annonce.id ad.id %}"> Correspond à ma recherche </a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        <div id="enregistrements" class="list-container" style="display:none">
+            {% for ad in saved %}
+                <article class="list-card">
+                    <h4 class="annonce-titre"> {{ ad.id }} -- <a href="{% url 'annonce' ad.id %}"> {{ ad.titre }} </a> </h4>
+                    <span>{{ ad.prix }} € </span>
+                    <div>
+                        <p> {{ ad.utilisateur}} </p>
+                        <a class="btn-card" href="/"> Contacter l'annonceur </a>
+                        <a class="btn-card" href="{% url 'enregistrer-annonce' annonce.id ad.id %}"> Correspond à ma recherche </a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+    </section>
 </div>
+
+<script>
+function openTab(evt, action) {
+  var i, x, onglet_actif;
+  x = document.getElementsByClassName("list-container");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("list-onglet");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(action).style.display = "flex";
+  evt.currentTarget.className += " active";
+}
+</script>
 
 {% endblock %}
