@@ -1,0 +1,36 @@
+{%  extends 'main.html' %}
+
+{% block content %}
+
+Recherche
+<div class="list-container">
+    <form method="GET" action="" >
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+
+{% if q %}
+    <div class="list-container">
+        <h1> annonces contenant "{{ q }} " </h1>
+        <p>
+            {% with results.count as total_results %}
+            {{ total_results }} Résultats trouvés
+            {% endwith %}
+        </p>
+        {% for ad in results %}
+            <article class="list-card">
+                <h4 class="annonce-titre"> {{ ad.id }} -- <a href="{% url 'annonce' ad.id %}"> {{ ad.titre }} </a> </h4>
+                <span>{{ ad.prix }} € </span>
+                <div>
+                    <p> {{ ad.utilisateur}} </p>
+                    <a class="btn-card" href="/"> Contacter l'annonceur </a>
+                </div>
+            </article>
+        {% empty %}
+        <p> There are no results for your query </p>
+        {% endfor %}
+    <div>
+{% endif %}
+
+{% endblock content %}

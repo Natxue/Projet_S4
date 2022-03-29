@@ -12,7 +12,7 @@
         {% for annonce in annonces %}
             <article class="card">
                 <h4 class="annonce-titre"> {{ annonce.id }} -- <a href="{% url 'annonce' annonce.id %}"> {{ annonce.titre }} </a> </h4>
-                {% if annonce.type == 1 %}
+                {% if annonce.type == 'demande' %}
                     {% if annonce.associations.all.count > 0 %}
                         <p> {{ annonce.associations.all.count }} correspondances </p>
                     {% else %}
